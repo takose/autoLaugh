@@ -2,13 +2,12 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    mySound.loadSound("laugh.mp3"); //サウンドファイルの読込み
-    mySound.setLoop(false); //ループ再生をONに
+    mySound.loadSound("sound.mp3");
+    mySound.setLoop(false);
     
     ofSetWindowShape(600, 400);
     ofSetFrameRate(30);
     ofBackground(0, 0, 0);
-    //  [adc~]
     bufferSize = 0;
     ofSoundStreamSetup(0, 1, this, 44100, BUFSIZE, 4);
 }
@@ -30,18 +29,19 @@ void ofApp::draw(){
         int dy = buffer[i] * 100;
         ofSetColor(255, 127, 127);
         ofLine(i, 200, i, 200 - dy);
-        if (buffer[i] <= 0.2){
+        if (buffer[i] <= 0.1 && buffer[i] >= -0.1){ //静かさの調整
             noSound++;
         }
     }
-    if(noSound >= 500){
+    if(noSound >= 500){ //精度の調整
         noSoundCount++;
     } else {
         noSoundCount=0;
     }
-    cout << noSoundCount << endl;
+    
     noSound=0;
-    if(noSoundCount>=20){
+    cout << noSoundCount << endl;
+    if(noSoundCount>=100){ //間の調整
         mySound.play();
         noSoundCount=0;
     }
